@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<catalog>
+    <constants>
+        <constant name="a">10</constant>
+        <constant name="b">20</constant>
+    </constants>
+    <calculations>
+        <calc name="sum">
+            @{a b +}
+        </calc>
+    </calculations>
+</catalog>
