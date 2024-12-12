@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<catalog>
+    <constants>
+        <constant name="a">10</constant>
+        <constant name="b">20</constant>
+        <constant name="c">30</constant>
+    </constants>
+    <about>
+        <author>Maxim</author>
+        <email>develop.kisa@gmail.com</email>
+    </about>
+    <calculations>
+        <calc name="sum">
+            @{a b +}
+        </calc>
+        <calc name="difference">
+            @{c b -}
+        </calc>
+        <calc name="product">
+            @{a c *}
+        </calc>
+        <calc name="maximum">
+            @{a b c max}
+        </calc>
+        <calc name="modulus">
+            @{c b mod}
+        </calc>
+    </calculations>
+</catalog>

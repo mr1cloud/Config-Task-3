@@ -1,0 +1,34 @@
+constant = dict(
+    name = [[a]]
+)
+constant --> 10
+constant = dict(
+    name = [[b]]
+)
+constant --> 20
+constant = dict(
+    name = [[c]]
+)
+constant --> 30
+author = [[Maxim]]
+email = [[develop.kisa@gmail.com]]
+calc = dict(
+    name = [[sum]]
+)
+calc = 30
+calc = dict(
+    name = [[difference]]
+)
+calc = 10
+calc = dict(
+    name = [[product]]
+)
+calc = 300
+calc = dict(
+    name = [[maximum]]
+)
+calc = 30
+calc = dict(
+    name = [[modulus]]
+)
+calc = 10
