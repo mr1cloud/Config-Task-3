@@ -1,34 +1,23 @@
-constant = dict(
-    name = [[a]]
+catalog = dict(
+    || Comment: info about bk101,
+    book = dict(
+        author = [[Gambardella, Matthew]],
+        title = [[XML Developer's Guide]],
+        genre = [[Computer]],
+        price = 44.95,
+        publish_date = [[2000-10-01]],
+        description = [[An in-depth look at creating applications
+            with XML.]]
+    ),
+    || Comment: info about bk102,
+    book = dict(
+        author = [[Ralls, Kim]],
+        title = [[Midnight Rain]],
+        genre = [[Fantasy]],
+        price = 5.95,
+        publish_date = [[2000-12-16]],
+        description = [[A former architect battles corporate zombies,
+            an evil sorceress, and her own childhood to become queen
+            of the world.]]
+    )
 )
-constant --> 10
-constant = dict(
-    name = [[b]]
-)
-constant --> 20
-constant = dict(
-    name = [[c]]
-)
-constant --> 30
-author = [[Maxim]]
-email = [[develop.kisa@gmail.com]]
-calc = dict(
-    name = [[sum]]
-)
-calc = 30
-calc = dict(
-    name = [[difference]]
-)
-calc = 10
-calc = dict(
-    name = [[product]]
-)
-calc = 300
-calc = dict(
-    name = [[maximum]]
-)
-calc = 30
-calc = dict(
-    name = [[modulus]]
-)
-calc = 10

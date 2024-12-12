@@ -79,48 +79,48 @@ def generate_config(data: dict) -> str:
         else:
             raise ValueError("Unsupported value type")
 
-    def generate_dict(data: dict) -> str:
+    def generate_dict(data: dict, indent_level=0) -> str:
         entries = []
+        indent = '    ' * indent_level
         for key, value in data.items():
-            entries.append(f"    {key} = {format_value(value)}")
+            entries.append(f"{indent}{key} = {format_value(value)}")
         buffer = ',\n'.join(entries)
-        return f"dict(\n{buffer}\n)"
+        return f"dict(\n{buffer}\n{'    ' * (indent_level - 1)})"
 
-    def process_node(node):
+    def process_node(node, indent_level=0):
         lines = []
+        indent = '    ' * indent_level
         if "comment" in node:
             comment = node["comment"]
             if "\n" in comment:
-                lines.append(f"<!--\n{comment}\n-->".replace("\n", "\n    "))
+                lines.append(f"{indent}<!--\n{comment}\n{indent}-->".replace("\n", f"\n{indent}"))
             else:
-                lines.append(f"|| {comment}")
+                lines.append(f"{indent}|| {comment}")
 
         tag = node.get("tag")
-        attributes = node.get("attributes", {})
         value = node.get("value")
         content = node.get("content", [])
 
-        if attributes:
-            attr_dict = generate_dict(attributes)
-            lines.append(f"{tag} = {attr_dict}")
         if value:
             if type(value) in (int, float):
                 if tag == 'constant':
                     constants[node['attributes']['name']] = value
-                    lines.append(f"{tag} --> {format_value(value)}")
+                    lines.append(f"{indent}{tag} --> {format_value(value)}")
                 else:
-                    lines.append(f"{tag} = {format_value(value)}")
+                    lines.append(f"{indent}{tag} = {format_value(value)}")
             else:
                 if '@{' not in value:
-                    lines.append(f"{tag} = {format_value(value)}")
+                    lines.append(f"{indent}{tag} = {format_value(value)}")
                 if '@{' in value:
                     expression = value.strip('@{}').split()
                     if expression[-1] in OPERATIONS:
                         result = evaluate_postfix(expression, constants)
-                        lines.append(f"{tag} = {result}")
+                        lines.append(f"{indent}{tag} = {result}")
 
-        for child in content:
-            lines.append(process_node(child))
+        if content:
+            nested_content = [process_node(child, indent_level + 1) for child in content]
+            nested_content_str = ',\n'.join(nested_content)
+            lines.append(f"{indent}{tag} = dict(\n{nested_content_str}\n{indent})")
 
         return "\n".join(lines)
 

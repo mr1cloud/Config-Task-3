@@ -5,7 +5,7 @@
         <constant name="b">20</constant>
         <constant name="c">30</constant>
     </constants>
-    <about>
+    <about class="dict">
         <author>Maxim</author>
         <email>develop.kisa@gmail.com</email>
     </about>
