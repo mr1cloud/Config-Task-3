@@ -63,3 +63,47 @@ dict(
 
 Все конструкции учебного конфигурационного языка (с учетом их возможной вложенности) должны быть покрыты тестами.
 Необходимо показать 2 примера описания конфигураций из разных предметных областей.
+
+# Тестирование:
+## С вычислениями:
+![image](https://github.com/user-attachments/assets/1e6cbc04-15c2-45e5-bd84-19ff08c7ad40)
+
+## Без вычислений:
+![image](https://github.com/user-attachments/assets/508d3a6d-e839-4a15-9345-d1cc8764e3a6)
+
+## Функции реализованные для тестирование:
+### 1) Проверка загрузки xml с помощью программы
+```python
+def test_load_xml(self):
+    tree = load_xml('testing.xml')
+    self.assertEqual(tree.tag, 'catalog')
+```
+
+### 2) Проверка выполнения вычсилений по постфиксной записи
+```python
+def test_evaluate_postfix(self):
+    expression = ['a', 'b', '+']
+    constants = {'a': 2, 'b': 5}
+    result = evaluate_postfix(expression, constants)
+    self.assertEqual(result, 7)
+```
+
+### 3) Проверка перевода xml в учебно конфигурационный язык
+```python
+def test_generate_config(self):
+    tree = load_xml('testing.xml')
+    data = xml_to_dict(tree)
+    config = generate_config(data)
+    self.assertEqual(config, """catalog = dict(
+    constants = dict(
+        constant --> 10,
+        constant --> 20
+    ),
+    calculations = dict(
+        calc = 30
+    )
+)""")
+```
+
+## Результатыт unit тестов:
+![image](https://github.com/user-attachments/assets/766cd8ce-baf8-4e22-86b1-5a51ec449e71)
