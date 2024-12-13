@@ -1,4 +1,4 @@
-import argparse, re
+import argparse
 import xml.etree.ElementTree as ElementTree
 
 
@@ -28,11 +28,23 @@ def evaluate_postfix(expression, constants):
     return stack[0]
 
 
-def load_xml(file_path: str) -> ElementTree.Element:
-    parser = ElementTree.XMLParser(target=ElementTree.TreeBuilder(insert_comments=True))
-    tree = ElementTree.parse(file_path, parser)
-    root = tree.getroot()
-    return root
+def load_xml_from_file(file_path: str) -> ElementTree.Element:
+    try:
+        parser = ElementTree.XMLParser(target=ElementTree.TreeBuilder(insert_comments=True))
+        tree = ElementTree.parse(file_path, parser)
+        return tree.getroot()
+    except ElementTree.ParseError as error:
+        print(f"Error parsing XML: {error}")
+        raise
+
+
+def load_xml_from_str(xml: str) -> ElementTree.Element:
+    try:
+        parser = ElementTree.XMLParser(target=ElementTree.TreeBuilder(insert_comments=True))
+        return ElementTree.fromstring(xml, parser)
+    except ElementTree.ParseError as error:
+        print(f"Error parsing XML: {error}")
+        raise
 
 
 def xml_to_dict(node: ElementTree.Element) -> dict:
@@ -87,6 +99,14 @@ def generate_config(data: dict) -> str:
         buffer = ',\n'.join(entries)
         return f"dict(\n{buffer}\n{'    ' * (indent_level - 1)})"
 
+    def generate_default_name(tag, attributes):
+        if tag == 'constant':
+            return attributes['name']
+        elif 'name' in attributes:
+            return attributes['name']
+        else:
+            return tag
+
     def process_node(node, indent_level=0):
         lines = []
         indent = '    ' * indent_level
@@ -99,28 +119,31 @@ def generate_config(data: dict) -> str:
 
         tag = node.get("tag")
         value = node.get("value")
+        attributes = node.get("attributes", {})
         content = node.get("content", [])
+        name = generate_default_name(tag, attributes)
+
 
         if value:
             if type(value) in (int, float):
                 if tag == 'constant':
                     constants[node['attributes']['name']] = value
-                    lines.append(f"{indent}{tag} --> {format_value(value)}")
+                    lines.append(f"{indent}{name} -> {format_value(value)}")
                 else:
-                    lines.append(f"{indent}{tag} = {format_value(value)}")
+                    lines.append(f"{indent}{name} = {format_value(value)}")
             else:
                 if '@{' not in value:
-                    lines.append(f"{indent}{tag} = {format_value(value)}")
+                    lines.append(f"{indent}{name} = {format_value(value)}")
                 if '@{' in value:
                     expression = value.strip('@{}').split()
                     if expression[-1] in OPERATIONS:
                         result = evaluate_postfix(expression, constants)
-                        lines.append(f"{indent}{tag} = {result}")
+                        lines.append(f"{indent}{name} = {result}")
 
         if content:
             nested_content = [process_node(child, indent_level + 1) for child in content]
             nested_content_str = ',\n'.join(nested_content)
-            lines.append(f"{indent}{tag} = dict(\n{nested_content_str}\n{indent})")
+            lines.append(f"{indent}{name} = dict(\n{nested_content_str}\n{indent})")
 
         return "\n".join(lines)
 
@@ -129,11 +152,23 @@ def generate_config(data: dict) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Transform XML to custom configuration language.")
-    parser.add_argument('--input', required=True, help="Input file path.")
+    parser.add_argument('--input', required=False, help="Input file path.")
     parser.add_argument('--output', required=True, help="Output file path.")
     args = parser.parse_args()
 
-    root = load_xml(args.input)
+    root = None
+    if not args.input:
+        print("Enter the input xml: ", end="")
+        lines = []
+        while True:
+            line = input()
+            if line == "":
+                break
+            lines.append(line)
+        root = load_xml_from_str("\n".join(lines))
+    else:
+        root = load_xml_from_file(args.input)
+
     data = xml_to_dict(root)
     print(data)
     config = generate_config(data)
