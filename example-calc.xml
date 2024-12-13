@@ -6,8 +6,8 @@
         <constant name="c">30</constant>
     </constants>
     <about class="dict">
-        <author>Maxim</author>
-        <email>develop.kisa@gmail.com</email>
+        <author name="author">Maxim</author>
+        <email name="email">develop.kisa@gmail.com</email>
     </about>
     <calculations>
         <calc name="sum">
