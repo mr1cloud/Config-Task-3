@@ -66,10 +66,10 @@ dict(
 
 # Тестирование:
 ## С вычислениями:
-![image](https://github.com/user-attachments/assets/1e6cbc04-15c2-45e5-bd84-19ff08c7ad40)
+![image](https://github.com/user-attachments/assets/0fcf735b-6e7a-42dd-b2cf-6cf3c9fcf855)
 
 ## Без вычислений:
-![image](https://github.com/user-attachments/assets/508d3a6d-e839-4a15-9345-d1cc8764e3a6)
+![image](https://github.com/user-attachments/assets/bac72210-f46c-4d75-9aaa-375ee546045e)
 
 ## Функции реализованные для тестирование:
 ### 1) Проверка загрузки xml с помощью программы
